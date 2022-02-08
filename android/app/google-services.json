@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "772103508861",
+    "project_id": "amazing-chat-f0cba",
+    "storage_bucket": "amazing-chat-f0cba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772103508861:android:d747db15038fec45117214",
+        "android_client_info": {
+          "package_name": "com.example.amazing_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772103508861-g7b90a197s974uffsm7b3uj02q1vdbef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqko8WKWZvprrYILOGSTqBGhxB7fnaHCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772103508861-g7b90a197s974uffsm7b3uj02q1vdbef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
