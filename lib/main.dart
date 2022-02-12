@@ -1,3 +1,7 @@
+import 'package:amazing_chat/screens/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import './screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Amazing Chat',
       theme: theme.copyWith(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.pink,
+        ),
         textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom()),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -25,7 +32,30 @@ class MyApp extends StatelessWidget {
           brightness: ThemeData.estimateBrightnessForColor(Colors.deepPurple),
         ),
       ),
-      home: AuthScreen(),
+      home: FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          return StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder:
+                (BuildContext context, AsyncSnapshot<dynamic> streamSnapshot) {
+              if (streamSnapshot.hasData) {
+                return ChatScreen();
+              } else {
+                return AuthScreen();
+              }
+            },
+          );
+        },
+      ),
     );
   }
 }
