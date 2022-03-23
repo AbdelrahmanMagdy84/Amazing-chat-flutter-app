@@ -10,17 +10,16 @@ void main() {
 
 class CustomTextStyle {
   static TextStyle customHeadline6(BuildContext context) {
-    return TextStyle(
-      color: Colors.white,
+    return const TextStyle(
+      color: Color(0xFFF5F5F5),
       fontSize: 16,
     );
   }
-  //   Theme.of(context)
-  //       .textTheme
-  //       .headline6!
-  //       .copyWith(color: Colors.white, fontSize: 16);
-  // }
+ 
 }
+
+Color secondery = Color(0xFFE2D784);
+Color primary = Color(0xFF05595B);
 
 class MyApp extends StatelessWidget {
   @override
@@ -30,36 +29,30 @@ class MyApp extends StatelessWidget {
       title: 'Amazing Chat',
       theme: theme.copyWith(
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.pink,
+          backgroundColor: primary,
         ),
         textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom()),
-        iconTheme: IconThemeData(color: Colors.pink),
+        iconTheme: IconThemeData(color: primary),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: Colors.pink,
+            primary: primary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
           ),
         ),
         colorScheme: theme.colorScheme.copyWith(
-          primary: Colors.pink,
-          background: Colors.pink,
-          secondary: Colors.deepPurple,
-          brightness: ThemeData.estimateBrightnessForColor(Colors.deepPurple),
+          primary: primary,
+          background: secondery,
+          secondary: secondery,
+          
         ),
-        // textTheme: TextTheme(
-        //   headline6: Theme.of(context)
-        //       .textTheme
-        //       .headline6!
-        //       .copyWith(color: Colors.black, fontSize: 16),
-        // ),
       ),
       home: FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),

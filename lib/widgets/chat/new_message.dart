@@ -34,7 +34,7 @@ class _NewMessageState extends State<NewMessage> {
         "createdAt": Timestamp.now(),
         "userId": user.uid,
         "username": userData["username"],
-        "userImage":userData["imageUrl"]
+        "userImage": userData["imageUrl"]
       },
     );
 
@@ -50,9 +50,16 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              minLines: 1,
+              maxLines: 5,
               controller: _enterdMessageController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 label: Text("Send message..."),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(30),
+                  ),
+                ),
               ),
             ),
           ),

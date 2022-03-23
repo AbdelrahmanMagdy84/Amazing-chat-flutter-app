@@ -9,7 +9,7 @@ class AuthForm extends StatefulWidget {
       {required String email,
       required String username,
       required String password,
-      required File image,
+      required File? image,
       required bool isLogin,
       required BuildContext ctx}) submitFun;
   final bool isLoading;
@@ -40,15 +40,15 @@ class _AuthFormState extends State<AuthForm> {
           email: userEmail.trim(),
           username: userName.trim(),
           password: userPassword.trim(),
-          image: pickedImage!,
+          image: pickedImage,
           isLogin: isLogin,
           ctx: context);
     }
   }
 
   Future<File?> chooseImage() async {
-    XFile? tempFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 50,maxWidth:150 );
+    XFile? tempFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery, imageQuality: 50, maxWidth: 150);
     pickedImage = File(tempFile!.path);
     return pickedImage;
   }
@@ -70,7 +70,7 @@ class _AuthFormState extends State<AuthForm> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ImageAuth(chooseImage),
+                      if (!isLogin) ImageAuth(chooseImage),
                       TextFormField(
                         key: ValueKey('email'),
                         validator: (value) {
@@ -119,6 +119,7 @@ class _AuthFormState extends State<AuthForm> {
                       if (widget.isLoading) CircularProgressIndicator(),
                       if (!widget.isLoading)
                         ElevatedButton(
+                          
                           onPressed: () {
                             _trySubmit();
                           },

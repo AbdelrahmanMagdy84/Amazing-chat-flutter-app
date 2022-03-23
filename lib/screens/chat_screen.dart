@@ -2,22 +2,9 @@ import 'package:amazing_chat/widgets/chat/messages.dart';
 import 'package:amazing_chat/widgets/chat/new_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class ChatScreen extends StatelessWidget {
-  Future<void> inialize() async {
-    // FirebaseFirestore.instance
-    //     .collection('chats/GD8wPTo51qh1qVHCrRZC/messeges')
-    //     .snapshots()
-    //     .listen((event) {
-    //   print('--------------------------------------------------');
-    //   event.docs.forEach((element) {
-    //     print(element['text']);
-    //   });
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,13 +18,15 @@ class ChatScreen extends StatelessWidget {
             }
             return Scaffold(
               appBar: AppBar(
-                title: Text(
+                centerTitle: true,
+                title:  Text(
                   "Amazing Chat",
-                  style: TextStyle(color: Colors.white),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 actions: [
                   DropdownButton(
-                      icon: Icon(Icons.more_vert),
+                      icon:const  Icon(Icons.more_vert),
                       items: [
                         DropdownMenuItem(
                           child: Row(
