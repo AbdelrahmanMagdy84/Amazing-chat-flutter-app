@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Amazing Chat',
       theme: theme.copyWith(
         appBarTheme: AppBarTheme(

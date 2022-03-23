@@ -18,6 +18,7 @@ class ChatScreen extends StatelessWidget {
             }
             return Scaffold(
               appBar: AppBar(
+                
                 centerTitle: true,
                 title:  Text(
                   "Amazing Chat",
@@ -26,7 +27,8 @@ class ChatScreen extends StatelessWidget {
                 ),
                 actions: [
                   DropdownButton(
-                      icon:const  Icon(Icons.more_vert),
+                    underline: Container(),
+                      icon:  Icon(Icons.more_vert,color: Theme.of(context).colorScheme.secondary,),
                       items: [
                         DropdownMenuItem(
                           child: Row(
