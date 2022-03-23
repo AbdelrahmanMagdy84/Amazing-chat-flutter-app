@@ -56,94 +56,130 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(20),
           child: Card(
             elevation: 22,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (!isLogin) ImageAuth(chooseImage),
-                      TextFormField(
-                        key: ValueKey('email'),
-                        validator: (value) {
-                          if (value!.isEmpty || !value.contains('@')) {
-                            return 'Please enter a valid Email';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          label: const Text("Email Address"),
+            child: Container(
+              color: Theme.of(context).colorScheme.secondary,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!isLogin) ImageAuth(chooseImage),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: TextFormField(
+                            
+                            key: ValueKey('email'),
+                            validator: (value) {
+                              if (value!.isEmpty || !value.contains('@')) {
+                                return 'Please enter a valid Email';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            
+                              decoration:const InputDecoration(
+                                 constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
+                                label: const Text("Email Address"),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                ),
+                            onSaved: (value) {
+                              userEmail = value!;
+                            },
+                            
+                          ),
                         ),
-                        onSaved: (value) {
-                          userEmail = value!;
-                        },
-                      ),
-                      if (!isLogin)
-                        TextFormField(
-                          key: ValueKey('username'),
-                          validator: (value) {
-                            if (value!.isEmpty || value.length < 5) {
-                              return "Please enter at least 5 characters";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(label: Text("Username")),
-                          onSaved: (value) {
-                            userName = value!;
-                          },
-                        ),
-                      TextFormField(
-                        key: ValueKey('password'),
-                        validator: (value) {
-                          if (value!.isEmpty || value.length < 8) {
-                            return "Password must be greater than 8 characters";
-                          }
-                          return null;
-                        },
-                        decoration:
-                            const InputDecoration(label: Text('Password')),
-                        onSaved: (value) {
-                          userPassword = value!;
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      if (widget.isLoading) CircularProgressIndicator(),
-                      if (!widget.isLoading)
-                        ElevatedButton(
+                        if (!isLogin)
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              key: ValueKey('username'),
+                              validator: (value) {
+                                if (value!.isEmpty || value.length < 5) {
+                                  return "Please enter at least 5 characters";
+                                }
+                                return null;
+                              },
+                              decoration:const InputDecoration(
+                               constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
+                                label: Text("Username"),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                              ),
+                              onSaved: (value) {
+                                userName = value!;
+                              },
+                            ),
+                          ),
+                        Padding(
+                         padding: const EdgeInsets.all(10),
+                          child: TextFormField(
+                            key: ValueKey('password'),
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 8) {
+                                return "Password must be greater than 8 characters";
+                              }
+                              return null;
+                            },
                           
-                          onPressed: () {
-                            _trySubmit();
-                          },
-                          child: Text(
-                            isLogin ? "Login" : "Signup",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                                 decoration:const InputDecoration(
+                                 constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
+                                label: const Text("Password"),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                ),
+                            onSaved: (value) {
+                              userPassword = value!;
+                            },
                           ),
                         ),
-                      SizedBox(height: 5),
-                      if (!widget.isLoading)
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isLogin = !isLogin;
-                            });
-                          },
-                          child: Text(
-                            isLogin
-                                ? "Create a new acount"
-                                : "I already have an acount",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        SizedBox(height: 20),
+                        if (widget.isLoading) CircularProgressIndicator(),
+                        if (!widget.isLoading)
+                          ElevatedButton(
+                            onPressed: () {
+                              _trySubmit();
+                            },
+                            child: Text(
+                              isLogin ? "Login" : "Sign up",
+                              style: TextStyle(fontWeight: FontWeight.bold,),
+                            ),
                           ),
-                        )
-                    ],
+                        SizedBox(height: 5),
+                        if (!widget.isLoading)
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isLogin = !isLogin;
+                              });
+                            },
+                            child: Text(
+                              isLogin
+                                  ? "Create a new acount"
+                                  : "I already have an acount",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),
