@@ -1,10 +1,15 @@
+import 'dart:io';
+
+import 'package:amazing_chat/widgets/auth/image_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(
       {required String email,
       required String username,
       required String password,
+      required File image,
       required bool isLogin,
       required BuildContext ctx}) submitFun;
   final bool isLoading;
@@ -19,8 +24,14 @@ class _AuthFormState extends State<AuthForm> {
   String userEmail = '';
   String userName = '';
   String userPassword = '';
+  File? pickedImage;
 
   void _trySubmit() {
+    if (pickedImage == null && !isLogin) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("please choose an image")));
+      return;
+    }
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
@@ -29,9 +40,17 @@ class _AuthFormState extends State<AuthForm> {
           email: userEmail.trim(),
           username: userName.trim(),
           password: userPassword.trim(),
+          image: pickedImage!,
           isLogin: isLogin,
           ctx: context);
     }
+  }
+
+  Future<File?> chooseImage() async {
+    XFile? tempFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 50,maxWidth:150 );
+    pickedImage = File(tempFile!.path);
+    return pickedImage;
   }
 
   @override
@@ -51,6 +70,7 @@ class _AuthFormState extends State<AuthForm> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      ImageAuth(chooseImage),
                       TextFormField(
                         key: ValueKey('email'),
                         validator: (value) {
@@ -76,8 +96,7 @@ class _AuthFormState extends State<AuthForm> {
                             }
                             return null;
                           },
-                          decoration:
-                              const InputDecoration(label: Text("Username")),
+                          decoration: InputDecoration(label: Text("Username")),
                           onSaved: (value) {
                             userName = value!;
                           },
