@@ -1,4 +1,7 @@
+import 'package:amazing_chat/app_bar_title_widget.dart';
+import 'package:amazing_chat/screens/all_chats_screen.dart';
 import 'package:amazing_chat/screens/chat_screen.dart';
+import 'package:amazing_chat/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/auth_screen.dart';
@@ -15,7 +18,6 @@ class CustomTextStyle {
       fontSize: 16,
     );
   }
- 
 }
 
 Color secondery = Color(0xFFE2D784);
@@ -46,31 +48,19 @@ class MyApp extends StatelessWidget {
           primary: primary,
           background: secondery,
           secondary: secondery,
-          
         ),
       ),
+      routes: {ChatScreen.routeName: (ctx) => ChatScreen()},
       home: FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return  Scaffold(backgroundColor: Theme.of(context).colorScheme.primary,
+            
             );
           }
 
-          return StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder:
-                (BuildContext context, AsyncSnapshot<dynamic> streamSnapshot) {
-              if (streamSnapshot.hasData) {
-                return ChatScreen();
-              } else {
-                return AuthScreen();
-              }
-            },
-          );
+          return SplashScreen();
         },
       ),
     );
