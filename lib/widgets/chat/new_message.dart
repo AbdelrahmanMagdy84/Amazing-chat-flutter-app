@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/services.dart';
 
 class NewMessage extends StatefulWidget {
+  final String? roomDocId;
+  NewMessage(this.roomDocId);
   @override
   State<NewMessage> createState() => _NewMessageState();
 }
@@ -28,7 +31,11 @@ class _NewMessageState extends State<NewMessage> {
         .collection("users")
         .doc(user!.uid)
         .get();
-    FirebaseFirestore.instance.collection("chat").add(
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(widget.roomDocId)
+        .collection("room")
+        .add(
       {
         "text": message,
         "createdAt": Timestamp.now(),

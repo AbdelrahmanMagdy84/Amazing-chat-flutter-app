@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amazing_chat/app_bar_title_widget.dart';
 import 'package:amazing_chat/widgets/auth/image_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,14 +26,26 @@ class _AuthFormState extends State<AuthForm> {
   String userName = '';
   String userPassword = '';
   File? pickedImage;
+  bool isValid = false;
+  bool validUsername = true;
+  bool validEmail = true;
+  bool validPassword = true;
 
   void _trySubmit() {
     if (pickedImage == null && !isLogin) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("please choose an image")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "please choose an image",
+          ),
+        ),
+      );
       return;
     }
-    final isValid = _formKey.currentState!.validate();
+    setState(() {
+      isValid = _formKey.currentState!.validate();
+    });
+
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState!.save();
@@ -72,49 +85,36 @@ class _AuthFormState extends State<AuthForm> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (!isLogin) ImageAuth(chooseImage),
+                        !isLogin
+                            ? ImageAuth(chooseImage)
+                            : Padding(
+                              padding: const EdgeInsets.only(top:10.0),
+                              child: SizedBox(
+                                  height: 50,
+                                  child: Text("WELCOME BACK",style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight:FontWeight.bold ),),
+                                ),
+                            ),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            
-                            key: ValueKey('email'),
-                            validator: (value) {
-                              if (value!.isEmpty || !value.contains('@')) {
-                                return 'Please enter a valid Email';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.emailAddress,
-                            
-                              decoration:const InputDecoration(
-                                 constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
-                                label: const Text("Email Address"),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15),
-                                    ),
-                                  ),
-                                ),
-                            onSaved: (value) {
-                              userEmail = value!;
-                            },
-                            
-                          ),
-                        ),
-                        if (!isLogin)
-                          Padding(
-                            padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            height: validEmail ? 40 : 60,
                             child: TextFormField(
-                              key: ValueKey('username'),
+                              key: const ValueKey('email'),
                               validator: (value) {
-                                if (value!.isEmpty || value.length < 5) {
-                                  return "Please enter at least 5 characters";
+                                if (value!.isEmpty || !value.contains('@')) {
+                                  setState(() {
+                                    validEmail = false;
+                                  });
+                                  return 'Please enter a valid Email';
                                 }
+                                setState(() {
+                                  validEmail = true;
+                                });
                                 return null;
                               },
-                              decoration:const InputDecoration(
-                               constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
-                                label: Text("Username"),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                label: Text("Email Address"),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(15),
@@ -122,33 +122,80 @@ class _AuthFormState extends State<AuthForm> {
                                 ),
                               ),
                               onSaved: (value) {
-                                userName = value!;
+                                userEmail = value!;
                               },
                             ),
                           ),
-                        Padding(
-                         padding: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            key: ValueKey('password'),
-                            validator: (value) {
-                              if (value!.isEmpty || value.length < 8) {
-                                return "Password must be greater than 8 characters";
-                              }
-                              return null;
-                            },
-                          
-                                 decoration:const InputDecoration(
-                                 constraints: BoxConstraints(minWidth: 100,maxHeight: 40),
-                                label: const Text("Password"),
+                        ),
+                        if (!isLogin)
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SizedBox(
+                              height: validUsername ? 40 : 60,
+                              child: TextFormField(
+                                key: ValueKey('username'),
+                                keyboardType: TextInputType.text,
+                                keyboardAppearance: Brightness.light,
+                                validator: (value) {
+                                  if (value!.isEmpty || value.length < 5) {
+                                    setState(() {
+                                      validUsername = false;
+                                    });
+                                    return "Please enter at least 5 characters";
+                                  }
+                                  setState(() {
+                                    validUsername = true;
+                                  });
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  label: Text("Username"),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(15),
                                     ),
                                   ),
                                 ),
-                            onSaved: (value) {
-                              userPassword = value!;
-                            },
+                                onSaved: (value) {
+                                  userName = value!;
+                                },
+                              ),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            height: validPassword ? 40 : 60,
+                            child: TextFormField(
+                              key: ValueKey('password'),
+                              validator: (value) {
+                                if (value!.isEmpty || value.length < 8) {
+                                  setState(() {
+                                    validPassword = false;
+                                  });
+                                  return "Password must be greater than 8 characters";
+                                }
+                                setState(() {
+                                  validPassword = true;
+                                });
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                constraints: BoxConstraints(
+                                    minWidth: 100,
+                                    maxHeight: 50,
+                                    minHeight: 40),
+                                label: Text("Password"),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                              ),
+                              onSaved: (value) {
+                                userPassword = value!;
+                              },
+                            ),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -160,7 +207,10 @@ class _AuthFormState extends State<AuthForm> {
                             },
                             child: Text(
                               isLogin ? "Login" : "Sign up",
-                              style: TextStyle(fontWeight: FontWeight.bold,),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                             ),
                           ),
                         SizedBox(height: 5),
