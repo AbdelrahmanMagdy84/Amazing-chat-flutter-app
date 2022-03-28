@@ -144,6 +144,7 @@ class _AuthFormState extends State<AuthForm> {
                               height: validUsername ? 40 : 60,
                               child: TextFormField(
                                 key: ValueKey('username'),
+                                textCapitalization: TextCapitalization .words,
                                 keyboardType: TextInputType.text,
                                 keyboardAppearance: Brightness.light,
                                 validator: (value) {

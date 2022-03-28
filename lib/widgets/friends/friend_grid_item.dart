@@ -45,10 +45,7 @@ class Friend_grid_item extends StatelessWidget {
               height: 3,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary,
-                borderRadius: const BorderRadius.only(
-                //  topRight: Radius.circular(5),
-                 // topLeft: Radius.circular(5),
-                ),
+                borderRadius: const BorderRadius.only(),
               ),
             ),
             FittedBox(
@@ -57,9 +54,7 @@ class Friend_grid_item extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
                   borderRadius: const BorderRadius.only(
-                      //   topRight: Radius.circular(15),
                       bottomLeft: Radius.circular(15),
-//topLeft: Radius.circular(15),
                       bottomRight: Radius.circular(15)),
                 ),
                 child: Text(
