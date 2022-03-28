@@ -2,13 +2,13 @@ import 'package:amazing_chat/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SingleMessageWidget extends StatelessWidget {
+class MessageBubble extends StatelessWidget {
   final String uid;
   final String username;
   final String message;
   final Key key;
   final String imageUrl;
-  SingleMessageWidget(
+  MessageBubble(
       this.message, this.uid, this.username, this.imageUrl, this.key);
 
   @override
@@ -45,7 +45,7 @@ class SingleMessageWidget extends StatelessWidget {
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15)),
             ),
-            padding:const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             child: Text(
               username,
               style: TextStyle(
@@ -62,7 +62,9 @@ class SingleMessageWidget extends StatelessWidget {
             child: Text(
               message,
               maxLines: 10,
-              style: CustomTextStyle.customHeadline6(context),
+              style: CustomTextStyle.customHeadline6(context).copyWith(
+                color: isMe?null:Colors.black
+              ),
             ),
           ),
         ],
@@ -87,12 +89,16 @@ class SingleMessageWidget extends StatelessWidget {
                     children: [
                       if (!isMe)
                         CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
                           radius: 15,
                           backgroundImage: NetworkImage(imageUrl),
                         ),
                       Flexible(fit: FlexFit.loose, child: container),
                       if (isMe)
                         CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           radius: 15,
                           backgroundImage: NetworkImage(imageUrl),
                         ),

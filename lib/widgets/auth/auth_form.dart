@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:amazing_chat/app_bar_title_widget.dart';
+import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:amazing_chat/widgets/auth/image_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -61,7 +61,7 @@ class _AuthFormState extends State<AuthForm> {
 
   Future<File?> chooseImage() async {
     XFile? tempFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 50, maxWidth: 150);
+        source: ImageSource.gallery, imageQuality: 100, maxWidth: 150);
     pickedImage = File(tempFile!.path);
     return pickedImage;
   }
@@ -88,12 +88,22 @@ class _AuthFormState extends State<AuthForm> {
                         !isLogin
                             ? ImageAuth(chooseImage)
                             : Padding(
-                              padding: const EdgeInsets.only(top:10.0),
-                              child: SizedBox(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: SizedBox(
                                   height: 50,
-                                  child: Text("WELCOME BACK",style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight:FontWeight.bold ),),
+                                  child: Text(
+                                    "WELCOME BACK",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5!
+                                        .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                  ),
                                 ),
-                            ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: SizedBox(

@@ -1,5 +1,5 @@
-import 'package:amazing_chat/app_bar_title_widget.dart';
-import 'package:amazing_chat/screens/all_chats_screen.dart';
+import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
+import 'package:amazing_chat/screens/Friends_screen.dart';
 import 'package:amazing_chat/screens/chat_screen.dart';
 import 'package:amazing_chat/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

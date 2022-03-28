@@ -1,12 +1,14 @@
-import 'package:amazing_chat/app_bar_title_widget.dart';
+import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:amazing_chat/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AllchatsScreen extends StatelessWidget {
+import '../widgets/friends/friend_grid_item.dart';
+
+class FriendsScreen extends StatelessWidget {
   User? user;
-  AllchatsScreen(this.user);
+  FriendsScreen(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class AllchatsScreen extends StatelessWidget {
         title: AppBarTitle(null),
         actions: [
           DropdownButton(
+              dropdownColor: Theme.of(context).colorScheme.secondary,
               underline: Container(),
               icon: Icon(
                 Icons.more_vert,
@@ -64,54 +67,9 @@ class AllchatsScreen extends StatelessWidget {
             child: GridView.builder(
               itemCount: users.length,
               itemBuilder: ((context, index) {
-                return Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius:const BorderRadius.only(
-                      topLeft: Radius.circular(100),
-                      topRight: Radius.circular(100),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                    ),
-                  ),
-                  child: InkWell(
-                    key: ValueKey(users[index].id),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(ChatScreen.routeName,
-                          arguments: users[index].id);
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage:
-                              NetworkImage(users[index]["imageUrl"]),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        FittedBox(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15)),
-                            ),
-                            child: Text(
-                              users[index]["username"],
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                return Friend_grid_item(
+                  users: users,
+                  index: index,
                 );
               }),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
