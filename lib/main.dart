@@ -1,10 +1,6 @@
-import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
-import 'package:amazing_chat/screens/Friends_screen.dart';
 import 'package:amazing_chat/screens/chat_screen.dart';
 import 'package:amazing_chat/screens/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,8 +16,8 @@ class CustomTextStyle {
   }
 }
 
-Color secondery = Color(0xFFE2D784);
-Color primary = Color(0xFF05595B);
+Color secondery = const Color(0xFFE2D784);
+Color primary = const Color(0xFF05595B);
 
 class MyApp extends StatelessWidget {
   @override

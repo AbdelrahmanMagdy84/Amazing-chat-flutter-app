@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-import 'package:flutter/services.dart';
+
 
 class NewMessage extends StatefulWidget {
   final String? roomDocId;
@@ -51,8 +51,8 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(10),
       child: Row(
         children: [
           Expanded(
@@ -73,7 +73,7 @@ class _NewMessageState extends State<NewMessage> {
           IconButton(
             onPressed:
                 _enterdMessageController.text.isEmpty ? null : sendMessage,
-            icon: Icon(
+            icon: const Icon(
               Icons.send,
             ),
           )

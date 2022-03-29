@@ -6,10 +6,11 @@ class MessageBubble extends StatelessWidget {
   final String uid;
   final String username;
   final String message;
-  final Key key;
+
   final String imageUrl;
-  MessageBubble(
-      this.message, this.uid, this.username, this.imageUrl, this.key);
+ const MessageBubble(this.message, this.uid, this.username, this.imageUrl,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +63,8 @@ class MessageBubble extends StatelessWidget {
             child: Text(
               message,
               maxLines: 10,
-              style: CustomTextStyle.customHeadline6(context).copyWith(
-                color: isMe?null:Colors.black
-              ),
+              style: CustomTextStyle.customHeadline6(context)
+                  .copyWith(color: isMe ? null : Colors.black),
             ),
           ),
         ],
@@ -81,29 +81,26 @@ class MessageBubble extends StatelessWidget {
               flex: 3,
               fit: FlexFit.loose,
               child: Column(children: [
-                Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (!isMe)
-                        CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          radius: 15,
-                          backgroundImage: NetworkImage(imageUrl),
-                        ),
-                      Flexible(fit: FlexFit.loose, child: container),
-                      if (isMe)
-                        CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          radius: 15,
-                          backgroundImage: NetworkImage(imageUrl),
-                        ),
-                    ],
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (!isMe)
+                      CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        radius: 15,
+                        backgroundImage: NetworkImage(imageUrl),
+                      ),
+                    Flexible(fit: FlexFit.loose, child: container),
+                    if (isMe)
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        radius: 15,
+                        backgroundImage: NetworkImage(imageUrl),
+                      ),
+                  ],
                 ),
               ]),
             ),

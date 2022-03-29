@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../screens/chat_screen.dart';
 
-class Friend_grid_item extends StatelessWidget {
-  const Friend_grid_item({Key? key, required this.users, required this.index})
+class FriendGridItem extends StatelessWidget {
+  const FriendGridItem({Key? key, required this.users, required this.index})
       : super(key: key);
 
   final List<QueryDocumentSnapshot<Object?>> users;
@@ -50,7 +49,7 @@ class Friend_grid_item extends StatelessWidget {
             ),
             FittedBox(
               child: Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
                   borderRadius: const BorderRadius.only(

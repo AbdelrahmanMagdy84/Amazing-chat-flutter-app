@@ -1,16 +1,12 @@
 import 'package:amazing_chat/widgets/chat/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatefulWidget {
   final String? roomDocId;
-  final String? FriendId;
-  
-  Messages({required this.roomDocId, required this.FriendId
-   
-      });
+  final String? friendId;
+
+   Messages({required this.roomDocId, required this.friendId});
   @override
   State<Messages> createState() => _MessagesState();
 }
@@ -42,19 +38,19 @@ class _MessagesState extends State<Messages> {
                   messages[index]["userId"],
                   messages[index]["username"],
                   messages[index]["userImage"],
-                  ValueKey(messages[index].id));
+                  key: ValueKey(messages[index].id));
             },
           );
         }
         return FutureBuilder(
           future: FirebaseFirestore.instance
               .collection("users")
-              .doc(widget.FriendId!)
+              .doc(widget.friendId!)
               .get(),
           builder: (context,
               AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             return Center(
               child: Column(
@@ -71,7 +67,7 @@ class _MessagesState extends State<Messages> {
                   ),
                   FittedBox(
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.secondary,
                         borderRadius: const BorderRadius.only(
@@ -86,7 +82,9 @@ class _MessagesState extends State<Messages> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     "Say Hi 👋",
                     style: TextStyle(

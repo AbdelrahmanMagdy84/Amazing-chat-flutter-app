@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppBarTitle extends StatelessWidget {
-  double? size;
+  final double? size;
   AppBarTitle(this.size);
   Widget textBuilder(String text, BuildContext ctx) {
     return Text(

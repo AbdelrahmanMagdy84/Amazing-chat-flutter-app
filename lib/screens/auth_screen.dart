@@ -61,7 +61,6 @@ class _AuthScreenState extends State<AuthScreen> {
       )));
     } catch (error) {
       toggleIsLoading();
-      print(error.toString());
     }
   }
 

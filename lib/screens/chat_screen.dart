@@ -1,11 +1,8 @@
-import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:amazing_chat/widgets/chat/messages.dart';
 import 'package:amazing_chat/widgets/chat/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 
 class ChatScreen extends StatefulWidget {
   static String routeName = "/chat_screen";
@@ -89,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
                 if (snap.connectionState == ConnectionState.waiting) {
                   return const Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: TitleColumnWidget(
                         friendImageUrl: null, friendUsername: null),
                   );
@@ -115,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
                 child: Messages(
               roomDocId: roomDocId,
-              FriendId: friendId,
+              friendId: friendId,
             )),
             NewMessage(roomDocId),
           ],
@@ -149,7 +146,7 @@ class TitleColumnWidget extends StatelessWidget {
         Container(
           width: 120,
           alignment: Alignment.center,
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Text(
             friendUsername == null ? "" : friendUsername!,
             style: TextStyle(

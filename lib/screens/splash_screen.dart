@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2), (() {
+    Future.delayed(const Duration(seconds: 2), (() {
       setState(() {
         showSplash = false;
       });
@@ -29,14 +29,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: showSplash
-            ? SplashWidget()
+            ? const SplashWidget()
             : StreamBuilder(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (BuildContext context,
                     AsyncSnapshot<dynamic> streamSnapshot) {
                   if (streamSnapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return SplashWidget();
+                    return const SplashWidget();
                   }
                   if (streamSnapshot.hasData) {
                     return FriendsScreen(FirebaseAuth.instance.currentUser);
@@ -81,7 +81,7 @@ class SplashWidget extends StatelessWidget {
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    var path = new Path();
+    var path = Path();
     path.lineTo(0, size.height);
     var firstStart = Offset(size.width / 4, size.height);
     var firstEnd = Offset(size.width / 2.25, size.height - 50.0);

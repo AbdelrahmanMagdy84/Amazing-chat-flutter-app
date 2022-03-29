@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:amazing_chat/widgets/auth/image_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -110,6 +108,7 @@ class _AuthFormState extends State<AuthForm> {
                             height: validEmail ? 40 : 60,
                             child: TextFormField(
                               key: const ValueKey('email'),
+                              textCapitalization: TextCapitalization.none,
                               validator: (value) {
                                 if (value!.isEmpty || !value.contains('@')) {
                                   setState(() {
@@ -132,7 +131,8 @@ class _AuthFormState extends State<AuthForm> {
                                 ),
                               ),
                               onSaved: (value) {
-                                userEmail = value!;
+                                userEmail = value!.toLowerCase();
+                                
                               },
                             ),
                           ),
@@ -143,8 +143,8 @@ class _AuthFormState extends State<AuthForm> {
                             child: SizedBox(
                               height: validUsername ? 40 : 60,
                               child: TextFormField(
-                                key: ValueKey('username'),
-                                textCapitalization: TextCapitalization .words,
+                                key: const ValueKey('username'),
+                                textCapitalization: TextCapitalization.words,
                                 keyboardType: TextInputType.text,
                                 keyboardAppearance: Brightness.light,
                                 validator: (value) {
@@ -178,7 +178,7 @@ class _AuthFormState extends State<AuthForm> {
                           child: SizedBox(
                             height: validPassword ? 40 : 60,
                             child: TextFormField(
-                              key: ValueKey('password'),
+                              key: const ValueKey('password'),
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 8) {
                                   setState(() {
@@ -209,8 +209,8 @@ class _AuthFormState extends State<AuthForm> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
-                        if (widget.isLoading) CircularProgressIndicator(),
+                        const SizedBox(height: 20),
+                        if (widget.isLoading) const CircularProgressIndicator(),
                         if (!widget.isLoading)
                           ElevatedButton(
                             onPressed: () {
@@ -224,7 +224,7 @@ class _AuthFormState extends State<AuthForm> {
                                       Theme.of(context).colorScheme.secondary),
                             ),
                           ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         if (!widget.isLoading)
                           TextButton(
                             onPressed: () {
@@ -236,7 +236,8 @@ class _AuthFormState extends State<AuthForm> {
                               isLogin
                                   ? "Create a new acount"
                                   : "I already have an acount",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           )
                       ],

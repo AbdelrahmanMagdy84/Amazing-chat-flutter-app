@@ -1,9 +1,7 @@
 import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
-import 'package:amazing_chat/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../widgets/friends/friend_grid_item.dart';
 
 class FriendsScreen extends StatelessWidget {
@@ -55,6 +53,7 @@ class FriendsScreen extends StatelessWidget {
             .where("email", isNotEqualTo: email)
             .get(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          
           if (snapshots.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -63,11 +62,11 @@ class FriendsScreen extends StatelessWidget {
 
           final users = snapshots.data!.docs;
           return Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: GridView.builder(
               itemCount: users.length,
               itemBuilder: ((context, index) {
-                return Friend_grid_item(
+                return FriendGridItem(
                   users: users,
                   index: index,
                 );
