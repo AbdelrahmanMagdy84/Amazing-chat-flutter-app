@@ -1,8 +1,10 @@
+import 'package:amazing_chat/provider/user_Provider.dart';
 import 'package:amazing_chat/widgets/chat/messages.dart';
 import 'package:amazing_chat/widgets/chat/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   static String routeName = "/chat_screen";
@@ -77,28 +79,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 size: 35,
               ),
             ),
-            FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .get(),
-              builder: (context,
-                  AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return const Expanded(
-                    flex: 4,
-                    child: TitleColumnWidget(
-                        friendImageUrl: null, friendUsername: null),
-                  );
-                }
-                return Expanded(
-                  flex: 4,
-                  child: TitleColumnWidget(
-                      friendImageUrl: snap.data!["imageUrl"],
-                      friendUsername: snap.data!["username"]),
-                );
-              },
-            ),
+            Expanded(
+                flex: 4,
+                child: Consumer<CurrentUserProvider>(
+                  builder: (context, currentUser, _) {
+                    return TitleColumnWidget(
+                        friendImageUrl: currentUser.getData["imageUrl"],
+                        friendUsername: currentUser.getData["username"]);
+                  },
+                ))
           ],
         ),
         iconTheme: IconThemeData(
@@ -112,7 +101,11 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
                 child: Messages(
               roomDocId: roomDocId,
-              friendId: friendId,
+              friendData: {
+                "username": friendUsername!,
+                "uid": friendId!,
+                "imageUrl": friendImageUrl!
+              },
             )),
             NewMessage(roomDocId),
           ],

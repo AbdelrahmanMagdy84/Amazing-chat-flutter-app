@@ -3,19 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
-  final String uid;
+  final bool isMe;
   final String username;
   final String message;
 
   final String imageUrl;
- const MessageBubble(this.message, this.uid, this.username, this.imageUrl,
+  const MessageBubble(this.message, this.isMe, this.username, this.imageUrl,
       {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final isMe = user!.uid == uid;
+
     var container = Container(
       padding: const EdgeInsets.only(
         right: 10,

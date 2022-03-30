@@ -59,7 +59,7 @@ class _AuthFormState extends State<AuthForm> {
 
   Future<File?> chooseImage() async {
     XFile? tempFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 100, maxWidth: 150);
+        source: ImageSource.gallery, imageQuality: 70, maxWidth: 200);
     pickedImage = File(tempFile!.path);
     return pickedImage;
   }
@@ -146,6 +146,7 @@ class _AuthFormState extends State<AuthForm> {
                                 key: const ValueKey('username'),
                                 textCapitalization: TextCapitalization.words,
                                 keyboardType: TextInputType.text,
+                                maxLength: 18,
                                 keyboardAppearance: Brightness.light,
                                 validator: (value) {
                                   if (value!.isEmpty || value.length < 5) {

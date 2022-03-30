@@ -1,18 +1,37 @@
+import 'dart:io';
+
+import 'package:amazing_chat/provider/user_Provider.dart';
 import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../widgets/friends/friend_grid_item.dart';
+import '../widgets/others/customDrawer.dart';
 
 class FriendsScreen extends StatelessWidget {
   User? user;
   FriendsScreen(this.user);
+
 
   @override
   Widget build(BuildContext context) {
     String? email = user!.email;
 
     return Scaffold(
+      drawer: FutureBuilder(
+        future:
+            Provider.of<CurrentUserProvider>(context, listen: false).setData(),
+        builder: (context, snapShot) {
+          return Consumer<CurrentUserProvider>(
+            builder: ((context, currentUser, _) {
+              return CustomDrawer(currentUser.getData["imageUrl"]!,
+                  currentUser.getData["username"]!);
+            }),
+          );
+        },
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: AppBarTitle(null),
@@ -53,7 +72,6 @@ class FriendsScreen extends StatelessWidget {
             .where("email", isNotEqualTo: email)
             .get(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
-          
           if (snapshots.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),

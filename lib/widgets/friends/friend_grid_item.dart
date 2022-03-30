@@ -25,11 +25,24 @@ class FriendGridItem extends StatelessWidget {
       child: InkWell(
         key: ValueKey(users[index].id),
         onTap: () {
-          Navigator.of(context).pushNamed(ChatScreen.routeName, arguments: {
-            "friendId": users[index].id,
-            "friendImage": users[index]["imageUrl"],
-            "friendUsername": users[index]["username"]
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatScreen(),
+              settings: RouteSettings(
+                arguments: {
+                  "friendId": users[index].id,
+                  "friendImage": users[index]["imageUrl"],
+                  "friendUsername": users[index]["username"]
+                },
+              ),
+            ),
+          );
+          // Navigator.of(context).pushNamed(ChatScreen.routeName, arguments: {
+          //   "friendId": users[index].id,
+          //   "friendImage": users[index]["imageUrl"],
+          //   "friendUsername": users[index]["username"]
+          // });
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,

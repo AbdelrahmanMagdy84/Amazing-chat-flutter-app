@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  // bool hasData;
-  // SplashScreen(this.hasData);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 2), (() {
+    Future.delayed(const Duration(seconds: 0), (() {
       setState(() {
         showSplash = false;
       });
