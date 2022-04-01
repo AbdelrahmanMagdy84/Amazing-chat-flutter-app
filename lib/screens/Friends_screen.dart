@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:amazing_chat/provider/user_Provider.dart';
 import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import '../widgets/drawer/custom_drawer.dart';
 import '../widgets/friends/friend_grid_item.dart';
-import '../widgets/others/customDrawer.dart';
 
 class FriendsScreen extends StatelessWidget {
   User? user;
   FriendsScreen(this.user);
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +29,8 @@ class FriendsScreen extends StatelessWidget {
         },
       ),
       appBar: AppBar(
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.secondary),
         centerTitle: true,
         title: AppBarTitle(null),
         actions: [
