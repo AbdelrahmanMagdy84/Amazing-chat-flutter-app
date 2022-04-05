@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
-
 class NewMessage extends StatefulWidget {
-  final String? roomDocId;
-  NewMessage(this.roomDocId);
+  String? roomDocId;
+  void Function(String message, String? roomDocId,BuildContext ctx) sendMessage;
+  NewMessage(this.sendMessage, this.roomDocId);
   @override
   State<NewMessage> createState() => _NewMessageState();
 }
@@ -20,32 +18,6 @@ class _NewMessageState extends State<NewMessage> {
         setState(() {});
       });
     super.initState();
-  }
-
-  void sendMessage() async {
-    String message = _enterdMessageController.text;
-    message = message.trim();
-    FocusScope.of(context).unfocus();
-    var user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .get();
-    FirebaseFirestore.instance
-        .collection("chats")
-        .doc(widget.roomDocId)
-        .collection("room")
-        .add(
-      {
-        "text": message,
-        "createdAt": Timestamp.now(),
-        "userId": user.uid,
-        "username": userData["username"],
-        "userImage": userData["imageUrl"]
-      },
-    );
-
-    _enterdMessageController.clear();
   }
 
   @override
@@ -71,8 +43,14 @@ class _NewMessageState extends State<NewMessage> {
             ),
           ),
           IconButton(
-            onPressed:
-                _enterdMessageController.text.isEmpty ? null : sendMessage,
+            onPressed: _enterdMessageController.text.isEmpty
+                ? null
+                : () {
+                  final room=
+                    widget.sendMessage(
+                        _enterdMessageController.text, widget.roomDocId,context);
+                    _enterdMessageController.clear();
+                  },
             icon: const Icon(
               Icons.send,
             ),

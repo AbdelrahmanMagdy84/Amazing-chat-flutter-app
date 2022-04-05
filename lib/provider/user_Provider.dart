@@ -8,22 +8,32 @@ import 'package:flutter/cupertino.dart';
 class CurrentUserProvider with ChangeNotifier {
   Map<String, String> _data = {};
   Map<String, String> get getData {
-    print("using provider");
     return _data;
   }
 
   Future<void> setData() async {
-    final userData = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-
-    _data = {
-      "uid": FirebaseAuth.instance.currentUser!.uid,
-      "username": userData["username"],
-      "imageUrl": userData["imageUrl"]
-    };
-    notifyListeners();
+    await Future.delayed(const Duration(seconds: 5), (() async {
+      try {
+        final userData = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get();
+        _data = {
+          "uid": FirebaseAuth.instance.currentUser!.uid,
+          "username": userData.data().toString().contains('username')
+              ? userData.get('username')
+              : '',
+          "imageUrl": userData.data().toString().contains('imageUrl')
+              ? userData.get('imageUrl')
+              : ''
+        };
+        notifyListeners();
+       
+      } catch (e) {
+        print("----------------------------------------------------------");
+        print(e.toString());
+      }
+    }));
   }
 
   Future<void> updateImage(File? image) async {
@@ -47,6 +57,11 @@ class CurrentUserProvider with ChangeNotifier {
         .doc(_data["uid"]!)
         .update({"username": username});
     _data["username"] = username;
+    notifyListeners();
+  }
+
+  void clear() {
+    _data = {};
     notifyListeners();
   }
 }

@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:amazing_chat/provider/user_Provider.dart';
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 import '../../common/wave_clipper.dart';
 import 'custom_animated_container.dart';
 
@@ -35,7 +33,7 @@ class _CustomDrawerState extends State<CustomDrawer>
 
   Future<void> chooseImage() async {
     XFile? tempFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 70, maxWidth: 200);
+        source: ImageSource.gallery, imageQuality: 70, maxWidth: 500);
     var temp = tempFile;
     if (temp != null) {
       setState(() {
@@ -74,8 +72,6 @@ class _CustomDrawerState extends State<CustomDrawer>
     });
   }
 
-  //validator is missing from save button
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -102,19 +98,19 @@ class _CustomDrawerState extends State<CustomDrawer>
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         radius: 101,
                         child: CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          backgroundColor: Colors.grey,
                           radius: 100,
                           child: isLaoding
                               ? Center(
                                   child: CircularProgressIndicator(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .secondary),
+                                          .primary),
                                 )
                               : null,
                           backgroundImage:
                               isLaoding ? null : NetworkImage(widget.imageUrl),
+                          onBackgroundImageError: isLaoding ? null : (_, __) {},
                         ),
                       ),
                       Positioned(

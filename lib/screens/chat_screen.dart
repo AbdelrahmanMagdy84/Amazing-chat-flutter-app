@@ -18,12 +18,10 @@ class _ChatScreenState extends State<ChatScreen> {
   String? friendId;
   String? friendUsername;
   String? friendImageUrl;
-  String? currentUserImageUrl;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     final data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     friendId = data["friendId"];
@@ -48,13 +46,28 @@ class _ChatScreenState extends State<ChatScreen> {
                 FirebaseAuth.instance.currentUser!.uid: null,
                 friendId: null
               }
-            }).then((value) {
+            }).then((newDoc) {
               setState(() {
-                roomDocId = value.id;
+                roomDocId = newDoc.id;
               });
             });
           }
         });
+  }
+
+  void sendMessage(String message, String? roomDoc, BuildContext ctx) {
+    FocusScope.of(ctx).unfocus();
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(roomDoc)
+        .collection("room")
+        .add(
+      {
+        "text": message,
+        "createdAt": Timestamp.now(),
+        "userId": FirebaseAuth.instance.currentUser!.uid,
+      },
+    );
   }
 
   @override
@@ -95,22 +108,25 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         toolbarHeight: 80,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(
-                child: Messages(
-              roomDocId: roomDocId,
-              friendData: {
-                "username": friendUsername!,
-                "uid": friendId!,
-                "imageUrl": friendImageUrl!
-              },
-            )),
-            NewMessage(roomDocId),
-          ],
-        ),
-      ),
+      body: roomDocId == null
+          ? Center(child: Text("Loading"))
+          : Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Messages(
+                        roomDocId: roomDocId,
+                        friendData: {
+                          "username": friendUsername!,
+                          "uid": friendId!,
+                          "imageUrl": friendImageUrl!
+                        },
+                        sendMessage: sendMessage),
+                  ),
+                  NewMessage(sendMessage, roomDocId),
+                ],
+              ),
+            ),
     );
   }
 }
@@ -152,3 +168,33 @@ class TitleColumnWidget extends StatelessWidget {
     );
   }
 }
+  //  FutureBuilder(
+      //   future: FirebaseFirestore.instance.collection('chats').add({
+      //     "users": {
+      //       FirebaseAuth.instance.currentUser!.uid: null,
+      //       friendId: null
+      //     }
+      //   }),
+      //   builder: (context, AsyncSnapshot<DocumentReference> snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return Container();
+      //     }
+      //     return Container(
+      //       child: Column(
+      //         children: [
+      //           Expanded(
+      //             child: Messages(
+      //                 roomDocId: snapshot.data!.id,
+      //                 friendData: {
+      //                   "username": friendUsername!,
+      //                   "uid": friendId!,
+      //                   "imageUrl": friendImageUrl!
+      //                 },
+      //                 sendMessage: sendMessage),
+      //           ),
+      //           NewMessage(sendMessage, snapshot.data!.id),
+      //         ],
+      //       ),
+      //     );
+      //   },
+      // ):

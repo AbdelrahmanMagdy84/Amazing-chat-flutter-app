@@ -15,13 +15,15 @@ class _ImageAuthState extends State<ImageAuth> {
   Widget build(BuildContext context) {
     return Column(children: [
       CircleAvatar(
-        radius: 50,
-        backgroundImage:
-            pickedImage == null ? null : FileImage(pickedImage!, scale: .1),
-        backgroundColor: Colors.grey,
-      ),
-      const SizedBox(
-        height: 5,
+        radius: 52,
+        backgroundColor:Theme.of(context).colorScheme.primary,
+        child: CircleAvatar(
+          radius: 50,
+          
+          backgroundImage:
+              pickedImage == null ? null : FileImage(pickedImage!, scale: .1),
+          backgroundColor: Colors.grey,
+        ),
       ),
       TextButton.icon(
           onPressed: () async {
@@ -31,7 +33,7 @@ class _ImageAuthState extends State<ImageAuth> {
             });
           },
           icon: const Icon(Icons.image),
-          label: const Text("Add your image"))
+          label: const Text("Choose your image"))
     ]);
   }
 }

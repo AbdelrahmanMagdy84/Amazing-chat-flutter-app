@@ -28,6 +28,11 @@ class _AuthFormState extends State<AuthForm> {
   bool validUsername = true;
   bool validEmail = true;
   bool validPassword = true;
+  bool upperCase = false;
+  bool lowerCase = false;
+  bool hasNumber = false;
+  bool validPasswordLength = false;
+  int passwordLenght = 0;
 
   void _trySubmit() {
     if (pickedImage == null && !isLogin) {
@@ -59,25 +64,69 @@ class _AuthFormState extends State<AuthForm> {
 
   Future<File?> chooseImage() async {
     XFile? tempFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 70, maxWidth: 200);
+        source: ImageSource.gallery, imageQuality: 70, maxWidth: 500);
     pickedImage = File(tempFile!.path);
     return pickedImage;
   }
 
+  double? fieldHeight(bool valid) {
+    return valid ? 40 : 55;
+  }
+
+  void checkPassword(String value) {
+    if (!isLogin) {
+      if (passwordLenght > value.length) {
+        setState(() {
+          upperCase = false;
+          lowerCase = false;
+          hasNumber = false;
+          validPasswordLength = false;
+          passwordLenght = value.length;
+        });
+      }
+      setState(() {
+        passwordLenght = value.length;
+      });
+
+      if (RegExp(r'^(?=.*?[A-Z])').hasMatch(value)) {
+        setState(() {
+          upperCase = true;
+        });
+      }
+      if (RegExp(r'^(?=.*[a-z])').hasMatch(value)) {
+        setState(() {
+          lowerCase = true;
+        });
+      }
+      if (RegExp("(?=.*?[0-9])").hasMatch(value)) {
+        setState(() {
+          hasNumber = true;
+        });
+      }
+      if (RegExp('^.{8,15}').hasMatch(value)) {
+        setState(() {
+          validPasswordLength = true;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    const fieldPadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Center(
         child: Container(
-          margin: const EdgeInsets.all(20),
+          margin: const EdgeInsets.all(10),
           child: Card(
             elevation: 22,
             child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
               color: Theme.of(context).colorScheme.secondary,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -103,19 +152,25 @@ class _AuthFormState extends State<AuthForm> {
                                 ),
                               ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: fieldPadding.copyWith(
+                              bottom: validEmail ? 15 : 5),
                           child: SizedBox(
-                            height: validEmail ? 40 : 60,
+                            height: fieldHeight(validEmail),
                             child: TextFormField(
                               key: const ValueKey('email'),
                               textCapitalization: TextCapitalization.none,
                               validator: (value) {
-                                if (value!.isEmpty || !value.contains('@')) {
+                                final regExp = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+                                if (!regExp.hasMatch(value!)) {
                                   setState(() {
                                     validEmail = false;
                                   });
-                                  return 'Please enter a valid Email';
+
+                                  return 'Please enter a valid email';
                                 }
+
                                 setState(() {
                                   validEmail = true;
                                 });
@@ -123,6 +178,7 @@ class _AuthFormState extends State<AuthForm> {
                               },
                               keyboardType: TextInputType.emailAddress,
                               decoration: const InputDecoration(
+                                errorStyle: TextStyle(height: 0.5),
                                 label: Text("Email Address"),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(
@@ -132,60 +188,73 @@ class _AuthFormState extends State<AuthForm> {
                               ),
                               onSaved: (value) {
                                 userEmail = value!.toLowerCase();
-                                
                               },
                             ),
                           ),
                         ),
                         if (!isLogin)
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              height: validUsername ? 40 : 60,
-                              child: TextFormField(
-                                key: const ValueKey('username'),
-                                textCapitalization: TextCapitalization.words,
-                                keyboardType: TextInputType.text,
-                                maxLength: 18,
-                                keyboardAppearance: Brightness.light,
-                                validator: (value) {
-                                  if (value!.isEmpty || value.length < 5) {
-                                    setState(() {
-                                      validUsername = false;
-                                    });
-                                    return "Please enter at least 5 characters";
-                                  }
+                          Container(
+                            margin: fieldPadding,
+                            height: 55,
+                            child: TextFormField(
+                              key: const ValueKey('username'),
+                              textCapitalization: TextCapitalization.words,
+                              keyboardType: TextInputType.text,
+                              maxLength: 18,
+                              keyboardAppearance: Brightness.light,
+                              validator: (value) {
+                                if (value!.isEmpty || value.length < 5) {
                                   setState(() {
-                                    validUsername = true;
+                                    validUsername = false;
                                   });
-                                  return null;
-                                },
-                                decoration: const InputDecoration(
-                                  label: Text("Username"),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15),
-                                    ),
+                                  return "Please enter at least 5 characters";
+                                }
+                                setState(() {
+                                  validUsername = true;
+                                });
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                                errorStyle: TextStyle(height: 0),
+                                counterStyle: TextStyle(height: 0.5),
+                                label: Text("Username"),
+                                hintText: "should be at least 5 chars",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
                                   ),
                                 ),
-                                onSaved: (value) {
-                                  userName = value!;
-                                },
                               ),
+                              onSaved: (value) {
+                                userName = value!;
+                              },
                             ),
                           ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: fieldPadding,
                           child: SizedBox(
-                            height: validPassword ? 40 : 60,
+                            height: fieldHeight(validPassword),
                             child: TextFormField(
                               key: const ValueKey('password'),
+                              onChanged: (value) {
+                                checkPassword(value);
+                              },
                               validator: (value) {
-                                if (value!.isEmpty || value.length < 8) {
+                                if (value!.isEmpty) {
                                   setState(() {
                                     validPassword = false;
                                   });
-                                  return "Password must be greater than 8 characters";
+                                  return "Please enter password";
+                                }
+                                final regExp = RegExp(
+                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$');
+                                if (!regExp.hasMatch(value)) {
+                                  setState(() {
+                                    validPassword = false;
+                                  });
+                                  return "Enter valid password";
                                 }
                                 setState(() {
                                   validPassword = true;
@@ -193,6 +262,7 @@ class _AuthFormState extends State<AuthForm> {
                                 return null;
                               },
                               decoration: const InputDecoration(
+                                errorStyle: TextStyle(height: 0.5),
                                 constraints: BoxConstraints(
                                     minWidth: 100,
                                     maxHeight: 50,
@@ -210,6 +280,14 @@ class _AuthFormState extends State<AuthForm> {
                             ),
                           ),
                         ),
+                        if (!isLogin)
+                          FittedBox(
+                            child: PasswordChecker(
+                                upperCase: upperCase,
+                                lowerCase: lowerCase,
+                                hasNumber: hasNumber,
+                                validPasswordLength: validPasswordLength),
+                          ),
                         const SizedBox(height: 20),
                         if (widget.isLoading) const CircularProgressIndicator(),
                         if (!widget.isLoading)
@@ -229,7 +307,16 @@ class _AuthFormState extends State<AuthForm> {
                         if (!widget.isLoading)
                           TextButton(
                             onPressed: () {
+                              _formKey.currentState!.reset();
                               setState(() {
+                                upperCase = false;
+                                lowerCase = false;
+                                hasNumber = false;
+                                validPasswordLength = false;
+                                passwordLenght = 0;
+                                validEmail = true;
+                                validUsername = true;
+                                validPassword = true;
                                 isLogin = !isLogin;
                               });
                             },
@@ -250,6 +337,50 @@ class _AuthFormState extends State<AuthForm> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PasswordChecker extends StatelessWidget {
+  const PasswordChecker({
+    Key? key,
+    required this.upperCase,
+    required this.lowerCase,
+    required this.hasNumber,
+    required this.validPasswordLength,
+  }) : super(key: key);
+
+  final bool upperCase;
+  final bool lowerCase;
+  final bool hasNumber;
+  final bool validPasswordLength;
+  Widget rowBuilder(bool checker, BuildContext ctx, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.check,
+            color: checker ? Theme.of(ctx).colorScheme.primary : Colors.grey,
+          ),
+          Text(label)
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        rowBuilder(lowerCase, context, "Lower-case"),
+        rowBuilder(upperCase, context, "Upper-case"),
+        rowBuilder(hasNumber, context, "Number"),
+        rowBuilder(validPasswordLength, context, "> 8 chars"),
+      ],
     );
   }
 }

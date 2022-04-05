@@ -77,6 +77,7 @@ class _AnimatedContainerBuilderState extends State<AnimatedContainerBuilder> {
                         keyboardType: TextInputType.text,
                         maxLength: 18,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(15),

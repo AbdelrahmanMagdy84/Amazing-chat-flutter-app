@@ -8,11 +8,13 @@ import 'package:provider/provider.dart';
 class Messages extends StatefulWidget {
   final String? roomDocId;
   final Map<String, String> friendData;
+  void Function(String message, String roomDocId,BuildContext ctx) sendMessage;
 
-  Messages({
-    required this.roomDocId,
-    required this.friendData,
-  });
+  Messages(
+      {required this.roomDocId,
+      required this.friendData,
+      required this.sendMessage
+      });
   @override
   State<Messages> createState() => _MessagesState();
 }
@@ -41,10 +43,11 @@ class _MessagesState extends State<Messages> {
             friendImageUrl: widget.friendData["imageUrl"]!,
           );
         }
-
         return NoMessagesWidget(
           friendUsername: widget.friendData["username"]!,
           friendImageUrl: widget.friendData["imageUrl"]!,
+          sendMessage: widget.sendMessage,
+          roomDocId: widget.roomDocId!,
         );
       },
     );
@@ -52,14 +55,18 @@ class _MessagesState extends State<Messages> {
 }
 
 class NoMessagesWidget extends StatelessWidget {
-  const NoMessagesWidget({
-    Key? key,
-    required this.friendImageUrl,
-    required this.friendUsername,
-  }) : super(key: key);
+  NoMessagesWidget(
+      {Key? key,
+      required this.friendImageUrl,
+      required this.friendUsername,
+      required this.sendMessage,
+      required this.roomDocId})
+      : super(key: key);
 
   final String friendUsername;
   final String friendImageUrl;
+  final String roomDocId;
+  void Function(String message, String roomDocId,BuildContext ctx) sendMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +101,20 @@ class NoMessagesWidget extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Text(
-            "Say Hi 👋",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Say Hi 👋",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary),
+              ),
+              ElevatedButton(
+                  onPressed: () => sendMessage("Hi 👋", roomDocId,context),
+                  child: Text("Send"))
+            ],
           ),
         ],
       ),

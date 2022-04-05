@@ -47,10 +47,12 @@ class FriendGridItem extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.secondary,
                 radius: 32,
                 child: CircleAvatar(
-                 
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   radius: 30,
-                  backgroundImage: NetworkImage(users[index]["imageUrl"]),
+                  backgroundImage: NetworkImage(
+                    users[index]["imageUrl"],
+                  ),
+                  onBackgroundImageError: (_, __) {},
                 ),
               ),
               Container(
@@ -63,6 +65,7 @@ class FriendGridItem extends StatelessWidget {
               ),
               FittedBox(
                 child: Container(
+                  margin: const EdgeInsets.all(2),
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
