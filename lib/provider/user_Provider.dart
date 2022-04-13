@@ -30,7 +30,6 @@ class CurrentUserProvider with ChangeNotifier {
         notifyListeners();
        
       } catch (e) {
-        print("----------------------------------------------------------");
         print(e.toString());
       }
     }));

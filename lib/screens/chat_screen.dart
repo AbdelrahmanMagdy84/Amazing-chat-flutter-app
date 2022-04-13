@@ -1,10 +1,12 @@
 import 'package:amazing_chat/provider/user_Provider.dart';
-import 'package:amazing_chat/widgets/chat/messages.dart';
-import 'package:amazing_chat/widgets/chat/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
+import '../widgets/chat widgets/messages.dart';
+import '../widgets/chat widgets/new_message.dart';
+import '../widgets/chat widgets/title_column_widget.dart';
+import 'package:sizer/sizer.dart';
 
 class ChatScreen extends StatefulWidget {
   static String routeName = "/chat_screen";
@@ -18,10 +20,12 @@ class _ChatScreenState extends State<ChatScreen> {
   String? friendId;
   String? friendUsername;
   String? friendImageUrl;
+   
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+     
     final data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     friendId = data["friendId"];
@@ -56,7 +60,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendMessage(String message, String? roomDoc, BuildContext ctx) {
-    FocusScope.of(ctx).unfocus();
     FirebaseFirestore.instance
         .collection("chats")
         .doc(roomDoc)
@@ -68,10 +71,12 @@ class _ChatScreenState extends State<ChatScreen> {
         "userId": FirebaseAuth.instance.currentUser!.uid,
       },
     );
+    FocusScope.of(ctx).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
+ 
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 40,
@@ -106,10 +111,11 @@ class _ChatScreenState extends State<ChatScreen> {
         iconTheme: IconThemeData(
           color: Theme.of(context).colorScheme.secondary,
         ),
-        toolbarHeight: 80,
+        toolbarHeight: 
+       SizerUtil.orientation == Orientation.portrait ? 80 : 40,
       ),
       body: roomDocId == null
-          ? Center(child: Text("Loading"))
+          ? const Center(child: Text("Loading"))
           : Container(
               child: Column(
                 children: [
@@ -130,71 +136,3 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-
-class TitleColumnWidget extends StatelessWidget {
-  const TitleColumnWidget({
-    Key? key,
-    required this.friendImageUrl,
-    required this.friendUsername,
-  }) : super(key: key);
-
-  final String? friendImageUrl;
-  final String? friendUsername;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          radius: 20,
-          backgroundImage:
-              friendImageUrl == null ? null : NetworkImage(friendImageUrl!),
-        ),
-        Container(
-          width: 120,
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(5),
-          child: Text(
-            friendUsername == null ? "" : friendUsername!,
-            style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.secondary),
-          ),
-        ),
-      ],
-    );
-  }
-}
-  //  FutureBuilder(
-      //   future: FirebaseFirestore.instance.collection('chats').add({
-      //     "users": {
-      //       FirebaseAuth.instance.currentUser!.uid: null,
-      //       friendId: null
-      //     }
-      //   }),
-      //   builder: (context, AsyncSnapshot<DocumentReference> snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return Container();
-      //     }
-      //     return Container(
-      //       child: Column(
-      //         children: [
-      //           Expanded(
-      //             child: Messages(
-      //                 roomDocId: snapshot.data!.id,
-      //                 friendData: {
-      //                   "username": friendUsername!,
-      //                   "uid": friendId!,
-      //                   "imageUrl": friendImageUrl!
-      //                 },
-      //                 sendMessage: sendMessage),
-      //           ),
-      //           NewMessage(sendMessage, snapshot.data!.id),
-      //         ],
-      //       ),
-      //     );
-      //   },
-      // ):

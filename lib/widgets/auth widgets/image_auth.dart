@@ -27,9 +27,9 @@ class _ImageAuthState extends State<ImageAuth> {
       ),
       TextButton.icon(
           onPressed: () async {
-            File? x = await widget.pickImage();
+            File? temp = await widget.pickImage();
             setState(() {
-              pickedImage = x;
+              pickedImage = temp;
             });
           },
           icon: const Icon(Icons.image),

@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:amazing_chat/provider/user_Provider.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import '../../common/wave_clipper.dart';
 import 'custom_animated_container.dart';
 
@@ -67,6 +69,7 @@ class _CustomDrawerState extends State<CustomDrawer>
       if (showInputWidget == true) {
         _animationController.forward();
       } else {
+        FocusScope.of(context).unfocus();
         _animationController.reverse();
       }
     });
@@ -77,29 +80,34 @@ class _CustomDrawerState extends State<CustomDrawer>
     return Drawer(
         child: Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
-      body: Container(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ClipPath(
-                    clipper: WaveClipper(),
-                    child: Container(
-                      height: 200,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+                  SizerUtil.orientation == Orientation.portrait
+                      ? ClipPath(
+                          clipper: WaveClipper(),
+                          child: Container(
+                            height: constraints.maxHeight * 0.3,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : SizedBox(
+                          height: constraints.maxHeight * 0.05,
+                        ),
                   Stack(
                     children: [
                       CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        radius: 101,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primary,
+                        radius: constraints.maxWidth * 0.26,
                         child: CircleAvatar(
                           backgroundColor: Colors.grey,
-                          radius: 100,
+                          radius: constraints.maxWidth * 0.25,
                           child: isLaoding
                               ? Center(
                                   child: CircularProgressIndicator(
@@ -108,9 +116,11 @@ class _CustomDrawerState extends State<CustomDrawer>
                                           .primary),
                                 )
                               : null,
-                          backgroundImage:
-                              isLaoding ? null : NetworkImage(widget.imageUrl),
-                          onBackgroundImageError: isLaoding ? null : (_, __) {},
+                          backgroundImage: isLaoding
+                              ? null
+                              : NetworkImage(widget.imageUrl),
+                          onBackgroundImageError:
+                              isLaoding ? null : (_, __) {},
                         ),
                       ),
                       Positioned(
@@ -126,8 +136,9 @@ class _CustomDrawerState extends State<CustomDrawer>
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: constraints.maxHeight * 0.03,
+                    //width: constraints.maxHeight * 0.03,
                   ),
                   Column(
                     children: [
@@ -162,13 +173,14 @@ class _CustomDrawerState extends State<CustomDrawer>
                                         const Text(
                                           "Username",
                                           style: TextStyle(
-                                              fontSize: 16, color: Colors.grey),
+                                              fontSize: 12,
+                                              color: Colors.grey),
                                         ),
                                         FittedBox(
                                           child: Text(
                                             widget.username,
                                             style: const TextStyle(
-                                                fontSize: 24,
+                                                fontSize: 18,
                                                 color: Colors.white),
                                           ),
                                         ),
@@ -201,8 +213,8 @@ class _CustomDrawerState extends State<CustomDrawer>
                 ],
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     ));
   }

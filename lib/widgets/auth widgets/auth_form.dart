@@ -1,18 +1,22 @@
 import 'dart:io';
-import 'package:amazing_chat/widgets/auth/image_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../common/custom_snackBar.dart';
+import 'image_auth.dart';
+import 'password_checker.dart';
+import '../../helpers/auth_helpers';
 
 class AuthForm extends StatefulWidget {
-  final void Function(
-      {required String email,
-      required String username,
-      required String password,
-      required File? image,
-      required bool isLogin,
-      required BuildContext ctx}) submitFun;
   final bool isLoading;
-  AuthForm(this.submitFun, this.isLoading);
+   Function({
+    required String email,
+    required String username,
+    required String password,
+    required File? image,
+    required bool isLogin,
+    required BuildContext ctx,
+  }) submitFun;
+  AuthForm(this.submitFun,this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -33,16 +37,13 @@ class _AuthFormState extends State<AuthForm> {
   bool hasNumber = false;
   bool validPasswordLength = false;
   int passwordLenght = 0;
+  double? fieldHeight(bool valid) {
+    return valid ? 40 : 55;
+  }
 
   void _trySubmit() {
     if (pickedImage == null && !isLogin) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "please choose an image",
-          ),
-        ),
-      );
+      CustomSnackBar.renderSnackBar(("Please choose an image"), context);
       return;
     }
     setState(() {
@@ -67,10 +68,6 @@ class _AuthFormState extends State<AuthForm> {
         source: ImageSource.gallery, imageQuality: 70, maxWidth: 500);
     pickedImage = File(tempFile!.path);
     return pickedImage;
-  }
-
-  double? fieldHeight(bool valid) {
-    return valid ? 40 : 55;
   }
 
   void checkPassword(String value) {
@@ -120,10 +117,16 @@ class _AuthFormState extends State<AuthForm> {
         child: Container(
           margin: const EdgeInsets.all(10),
           child: Card(
+            color: Theme.of(context).colorScheme.primary,
             elevation: 22,
             child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(70),
+                    topRight: Radius.circular(70)),
+              ),
               padding: EdgeInsets.symmetric(vertical: 10),
-              color: Theme.of(context).colorScheme.secondary,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -337,50 +340,6 @@ class _AuthFormState extends State<AuthForm> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class PasswordChecker extends StatelessWidget {
-  const PasswordChecker({
-    Key? key,
-    required this.upperCase,
-    required this.lowerCase,
-    required this.hasNumber,
-    required this.validPasswordLength,
-  }) : super(key: key);
-
-  final bool upperCase;
-  final bool lowerCase;
-  final bool hasNumber;
-  final bool validPasswordLength;
-  Widget rowBuilder(bool checker, BuildContext ctx, String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5,
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.check,
-            color: checker ? Theme.of(ctx).colorScheme.primary : Colors.grey,
-          ),
-          Text(label)
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        rowBuilder(lowerCase, context, "Lower-case"),
-        rowBuilder(upperCase, context, "Upper-case"),
-        rowBuilder(hasNumber, context, "Number"),
-        rowBuilder(validPasswordLength, context, "> 8 chars"),
-      ],
     );
   }
 }

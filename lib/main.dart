@@ -3,7 +3,7 @@ import 'package:amazing_chat/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sizer/sizer.dart';
 import 'provider/user_Provider.dart';
 
 void main() {
@@ -29,43 +29,47 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<CurrentUserProvider>(
         create: (context) => CurrentUserProvider(),
         builder: (context, widget) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Amazing Chat',
-            theme: theme.copyWith(
-              appBarTheme: AppBarTheme(
-                backgroundColor: primary,
-              ),
-              textButtonTheme:
-                  TextButtonThemeData(style: TextButton.styleFrom()),
-              iconTheme: IconThemeData(color: primary),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                  primary: primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+          return Sizer(
+            builder: (context, orientation, deviceType) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Amazing Chat',
+                theme: theme.copyWith(
+                  appBarTheme: AppBarTheme(
+                    backgroundColor: primary,
+                  ),
+                  textButtonTheme:
+                      TextButtonThemeData(style: TextButton.styleFrom()),
+                  iconTheme: IconThemeData(color: primary),
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                      primary: primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  colorScheme: theme.colorScheme.copyWith(
+                    primary: primary,
+                    background: secondery,
+                    secondary: secondery,
                   ),
                 ),
-              ),
-              colorScheme: theme.colorScheme.copyWith(
-                primary: primary,
-                background: secondery,
-                secondary: secondery,
-              ),
-            ),
-            routes: {ChatScreen.routeName: (ctx) => ChatScreen()},
-            home: FutureBuilder(
-              future: Firebase.initializeApp(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Scaffold(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  );
-                }
+                routes: {ChatScreen.routeName: (ctx) => ChatScreen()},
+                home: FutureBuilder(
+                  future: Firebase.initializeApp(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Scaffold(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                      );
+                    }
 
-                return SplashScreen();
-              },
-            ),
+                    return SplashScreen();
+                  },
+                ),
+              );
+            },
           );
         });
   }
