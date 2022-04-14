@@ -128,23 +128,4 @@ class FriendsScreen extends StatelessWidget {
   }
 }
 
-class TempFriendScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: CustomDrawer("", ""),
-        appBar: AppBar(
-          iconTheme:
-              IconThemeData(color: Theme.of(context).colorScheme.secondary),
-          centerTitle: true,
-          title: AppBarTitle(null),
-          actions: [
-            Icon(
-              Icons.more_vert,
-              color: Theme.of(context).colorScheme.secondary,
-            )
-          ],
-        ),
-        body: Container());
-  }
-}
+
