@@ -1,18 +1,18 @@
+import 'package:amazing_chat/provider/user_Provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NoMessagesWidget extends StatelessWidget {
   NoMessagesWidget(
       {Key? key,
       required this.friendImageUrl,
       required this.friendUsername,
-      required this.sendMessage,
       required this.roomDocId})
       : super(key: key);
 
   final String friendUsername;
   final String friendImageUrl;
   final String roomDocId;
-  void Function(String message, String roomDocId, BuildContext ctx) sendMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class NoMessagesWidget extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: Theme.of(context).colorScheme.secondary,
-            radius:isPortrait? 50:40,
+            radius: isPortrait ? 50 : 40,
             backgroundImage: NetworkImage(friendImageUrl),
           ),
           const SizedBox(
@@ -47,23 +47,25 @@ class NoMessagesWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
-            width:10
-          ),
+          const SizedBox(height: 10, width: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Say Hi 👋",
                 style: TextStyle(
-                    fontSize: isPortrait? 18:14,
+                    fontSize: isPortrait ? 18 : 14,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary),
               ),
               ElevatedButton(
-                  onPressed: () => sendMessage("Hi 👋", roomDocId, context),
-                  child: Text("Send",style: TextStyle(fontSize: isPortrait? 14:12 ),))
+                  onPressed: () =>
+                      Provider.of<CurrentUserProvider>(context, listen: false)
+                          .sendMessage("Hi 👋", roomDocId, context),
+                  child: Text(
+                    "Send",
+                    style: TextStyle(fontSize: isPortrait ? 14 : 12),
+                  ))
             ],
           ),
         ],

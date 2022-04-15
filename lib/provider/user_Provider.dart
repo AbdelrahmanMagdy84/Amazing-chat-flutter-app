@@ -1,13 +1,14 @@
 import 'dart:io';
 
+import 'package:amazing_chat/models/Acount.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 class CurrentUserProvider with ChangeNotifier {
-  Map<String, String> _data = {};
-  Map<String, String> get getData {
+  var _data = Acount("", "", "");
+  Acount get getData {
     return _data;
   }
 
@@ -18,17 +19,14 @@ class CurrentUserProvider with ChangeNotifier {
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .get();
-        _data = {
-          "uid": FirebaseAuth.instance.currentUser!.uid,
-          "username": userData.data().toString().contains('username')
-              ? userData.get('username')
-              : '',
-          "imageUrl": userData.data().toString().contains('imageUrl')
-              ? userData.get('imageUrl')
-              : ''
-        };
+        _data.uid = FirebaseAuth.instance.currentUser!.uid;
+        _data.username = userData.data().toString().contains('username')
+            ? userData.get('username')
+            : '';
+        _data.imageUrl = userData.data().toString().contains('imageUrl')
+            ? userData.get('imageUrl')
+            : '';
         notifyListeners();
-       
       } catch (e) {
         print(e.toString());
       }
@@ -39,28 +37,43 @@ class CurrentUserProvider with ChangeNotifier {
     final ref = FirebaseStorage.instance
         .ref()
         .child("users_images")
-        .child(_data["uid"]! + '.jpg');
+        .child(_data.uid + '.jpg');
     await ref.putFile(image!).whenComplete(() => null);
     final imageUrl = await ref.getDownloadURL();
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(_data["uid"]!)
+        .doc(_data.uid)
         .update({"imageUrl": imageUrl});
-    _data["imageUrl"] = imageUrl;
+    _data.imageUrl = imageUrl;
     notifyListeners();
   }
 
   Future<void> updateUsername(String username) async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(_data["uid"]!)
+        .doc(_data.uid)
         .update({"username": username});
-    _data["username"] = username;
+    _data.username = username;
     notifyListeners();
   }
 
+  void sendMessage(String message, String? roomDoc, BuildContext ctx) {
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(roomDoc)
+        .collection("room")
+        .add(
+      {
+        "text": message,
+        "createdAt": Timestamp.now(),
+        "userId": FirebaseAuth.instance.currentUser!.uid,
+      },
+    );
+    FocusScope.of(ctx).unfocus();
+  }
+
   void clear() {
-    _data = {};
+     _data = Acount("", "", "");
     notifyListeners();
   }
 }

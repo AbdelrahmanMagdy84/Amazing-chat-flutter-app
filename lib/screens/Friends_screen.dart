@@ -1,13 +1,11 @@
 import 'package:amazing_chat/provider/user_Provider.dart';
-import 'package:amazing_chat/screens/splash_screen.dart';
 import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-import '../common/wave_clipper.dart';
 import '../widgets/drawer/custom_drawer.dart';
+import '../widgets/drawer/temporary_drawer.dart';
 import '../widgets/friends widgets/friend_grid_item.dart';
 
 class FriendsScreen extends StatelessWidget {
@@ -19,38 +17,12 @@ class FriendsScreen extends StatelessWidget {
               .setData(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Drawer(
-                child: Scaffold(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  body: Column(
-                    children: [
-                      SizerUtil.orientation == Orientation.portrait
-                          ? ClipPath(
-                              clipper: WaveClipper(),
-                              child: Container(
-                                height: 30.h,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            )
-                          : SizedBox(
-                              height: 5.h,
-                            ),
-                      SizedBox(
-                        height: SizerUtil.orientation == Orientation.portrait
-                            ? 20.h
-                            : 50.w,
-                      ),
-                      CircularProgressIndicator(),
-                      Container(child: Center(child: Text("Loading..."))),
-                    ],
-                  ),
-                ),
-              );
+              return const TemporaryDrawer();
             }
             return Consumer<CurrentUserProvider>(
                 builder: ((context, currentUser, _) {
-              return CustomDrawer(currentUser.getData["imageUrl"]!,
-                  currentUser.getData["username"]!);
+              return CustomDrawer(
+                  currentUser.getData.imageUrl, currentUser.getData.username);
             }));
           }),
       appBar: AppBar(
@@ -58,38 +30,7 @@ class FriendsScreen extends StatelessWidget {
             IconThemeData(color: Theme.of(context).colorScheme.secondary),
         centerTitle: true,
         title: AppBarTitle(null),
-        actions: [
-          DropdownButton(
-              dropdownColor: Theme.of(context).colorScheme.secondary,
-              underline: Container(),
-              icon: Icon(
-                Icons.more_vert,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              items: [
-                DropdownMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(Icons.exit_to_app,
-                          color: Theme.of(context).colorScheme.primary),
-                      Text(
-                        'Logout',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ],
-                  ),
-                  value: "logout value",
-                ),
-              ],
-              onChanged: (value) {
-                if (value == "logout value") {
-                  Provider.of<CurrentUserProvider>(context, listen: false)
-                      .clear();
-                  FirebaseAuth.instance.signOut();
-                }
-              })
-        ],
+        actions: [dropdowbButtonBuilder(context)],
       ),
       body: FutureBuilder(
         future: FirebaseFirestore.instance
@@ -126,25 +67,36 @@ class FriendsScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class TempFriendScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: CustomDrawer("", ""),
-        appBar: AppBar(
-          iconTheme:
-              IconThemeData(color: Theme.of(context).colorScheme.secondary),
-          centerTitle: true,
-          title: AppBarTitle(null),
-          actions: [
-            Icon(
-              Icons.more_vert,
-              color: Theme.of(context).colorScheme.secondary,
-            )
-          ],
+  DropdownButton<String> dropdowbButtonBuilder(BuildContext context) {
+    return DropdownButton(
+        dropdownColor: Theme.of(context).colorScheme.secondary,
+        underline: Container(),
+        icon: Icon(
+          Icons.more_vert,
+          color: Theme.of(context).colorScheme.secondary,
         ),
-        body: Container());
+        items: [
+          DropdownMenuItem(
+            child: Row(
+              children: [
+                Icon(Icons.exit_to_app,
+                    color: Theme.of(context).colorScheme.primary),
+                Text(
+                  'Logout',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ],
+            ),
+            value: "logout value",
+          ),
+        ],
+        onChanged: (value) {
+          if (value == "logout value") {
+            Provider.of<CurrentUserProvider>(context, listen: false).clear();
+            FirebaseAuth.instance.signOut();
+          }
+        });
   }
 }

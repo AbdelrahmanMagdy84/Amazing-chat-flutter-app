@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class TitleColumnWidget extends StatelessWidget {
   const TitleColumnWidget({
     Key? key,
-    required this.friendImageUrl,
-    required this.friendUsername,
+    required this.imageUrl,
+    required this.username,
   }) : super(key: key);
 
-  final String? friendImageUrl;
-  final String? friendUsername;
+  final String imageUrl;
+  final String username;
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +22,18 @@ class TitleColumnWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: Theme.of(context).colorScheme.secondary,
-              radius:isProtrait ?20:15,
-              backgroundImage:
-                  friendImageUrl == null ? null : NetworkImage(friendImageUrl!),
+              radius: isProtrait ? 20 : 15,
+              backgroundImage: imageUrl != "" ? NetworkImage(imageUrl) : null,
             ),
             Container(
               width: 120,
               alignment: Alignment.center,
               padding: const EdgeInsets.all(5),
               child: Text(
-                friendUsername == null ? "" : friendUsername!,
+                username,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
-                    fontSize: isProtrait? 12:16,
+                    fontSize: isProtrait ? 12 : 16,
                     color: Theme.of(context).colorScheme.secondary),
               ),
             ),
