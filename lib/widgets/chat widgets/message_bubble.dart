@@ -6,7 +6,6 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
   final String username;
   final String message;
-
   final String imageUrl;
   const MessageBubble(this.message, this.isMe, this.username, this.imageUrl,
       {Key? key})
@@ -14,8 +13,6 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
     var container = Container(
       padding: const EdgeInsets.only(
         right: 10,
@@ -48,7 +45,7 @@ class MessageBubble extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             child: Text(
-              username,
+              username == "" ? "      " : username,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -87,25 +84,26 @@ class MessageBubble extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (!isMe)
-                      CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        radius: 15,
-                        backgroundImage: NetworkImage(imageUrl),
-                      ),
+                      circleAvatar(
+                          context, Theme.of(context).colorScheme.secondary),
                     Flexible(fit: FlexFit.loose, child: container),
                     if (isMe)
-                      CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        radius: 15,
-                        backgroundImage: NetworkImage(imageUrl),
-                      ),
+                      circleAvatar(
+                          context, Theme.of(context).colorScheme.primary),
                   ],
                 ),
               ]),
             ),
             if (!isMe) Expanded(child: Container())
           ]),
+    );
+  }
+
+  CircleAvatar circleAvatar(BuildContext context, Color color) {
+    return CircleAvatar(
+      backgroundColor: color,
+      radius: 15,
+      backgroundImage: imageUrl != "" ? NetworkImage(imageUrl) : null,
     );
   }
 }

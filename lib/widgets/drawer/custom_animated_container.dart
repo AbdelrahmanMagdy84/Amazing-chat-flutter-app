@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AnimatedContainerBuilder extends StatefulWidget {
   final AnimationController? _animController;
+
   final Future<void> Function(
       Function(TextEditingController usernameController) validate,
       TextEditingController usernameController) saveUsername;
@@ -21,6 +22,7 @@ class _AnimatedContainerBuilderState extends State<AnimatedContainerBuilder> {
   late Animation<double> _opacityAnimation;
   final usernameController = TextEditingController();
   bool showInputWidget = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -77,7 +79,8 @@ class _AnimatedContainerBuilderState extends State<AnimatedContainerBuilder> {
                         keyboardType: TextInputType.text,
                         maxLength: 18,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(15),
@@ -99,18 +102,34 @@ class _AnimatedContainerBuilderState extends State<AnimatedContainerBuilder> {
                     flex: 1,
                     child: ElevatedButton(
                       child: FittedBox(
-                          child: Text(
-                        "Save",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
-                      )),
+                        child: !isLoading
+                            ? Text(
+                                "Save",
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              )
+                            : Padding(
+                              padding: EdgeInsets.all(5),
+                              child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.secondary,
+                                                          ),
+                            ),
+                      ),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                       ),
-                      onPressed: () {
-                        widget.saveUsername(validate, usernameController);
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await widget.saveUsername(validate, usernameController);
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                     ),
                   ),

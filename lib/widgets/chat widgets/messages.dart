@@ -1,21 +1,17 @@
+import 'package:amazing_chat/provider/friend_data_provider.dart';
 import 'package:amazing_chat/provider/user_Provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'message_bubble.dart';
 import 'no_message_widget.dart';
+import 'package:intl/intl.dart';
 
 class Messages extends StatefulWidget {
   final String? roomDocId;
-  final Map<String, String> friendData;
-  void Function(String message, String roomDocId, BuildContext ctx) sendMessage;
 
-  Messages(
-      {required this.roomDocId,
-      required this.friendData,
-      required this.sendMessage});
+  Messages(this.roomDocId);
   @override
   State<Messages> createState() => _MessagesState();
 }
@@ -23,36 +19,39 @@ class Messages extends StatefulWidget {
 class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection("chats")
-          .doc(widget.roomDocId)
-          .collection("room")
-          .orderBy("createdAt", descending: true)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-        if (streamSnapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        final messages = streamSnapshot.data!.docs;
-        if (messages.isNotEmpty) {
-          return ListViewBuilder(
-            messages: messages,
-            friendUsername: widget.friendData["username"]!,
-            friendImageUrl: widget.friendData["imageUrl"]!,
-          );
-        }
-        return Center(
-          child: SingleChildScrollView(
-            child: NoMessagesWidget(
-              friendUsername: widget.friendData["username"]!,
-              friendImageUrl: widget.friendData["imageUrl"]!,
-              sendMessage: widget.sendMessage,
-              roomDocId: widget.roomDocId!,
-            ),
-          ),
+    return Consumer<FriendDataProvider>(
+      builder: (ctx, friendAcountData, _) {
+        return StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("chats")
+              .doc(widget.roomDocId)
+              .collection("room")
+              .orderBy("createdAt", descending: true)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            final messages = streamSnapshot.data!.docs;
+            if (messages.isNotEmpty) {
+              return ListViewBuilder(
+                messages: messages,
+                friendUsername: friendAcountData.getData.username,
+                friendImageUrl: friendAcountData.getData.imageUrl,
+              );
+            }
+            return Center(
+              child: SingleChildScrollView(
+                child: NoMessagesWidget(
+                  friendUsername: friendAcountData.getData.username,
+                  friendImageUrl: friendAcountData.getData.imageUrl,
+                  roomDocId: widget.roomDocId!,
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -81,11 +80,8 @@ class ListViewBuilder extends StatelessWidget {
             messages[index]["userId"]) {
           return Consumer<CurrentUserProvider>(
             builder: ((context, currentUser, _) {
-              return MessageBubble(
-                  messages[index]['text'],
-                  true,
-                  currentUser.getData["username"]!,
-                  currentUser.getData["imageUrl"]!,
+              return MessageBubble(messages[index]['text'], true,
+                  currentUser.getData.username, currentUser.getData.imageUrl,
                   key: ValueKey(messages[index].id));
             }),
           );
@@ -97,3 +93,5 @@ class ListViewBuilder extends StatelessWidget {
     );
   }
 }
+//DateTime x = messages[index]["createdAt"].toDate();
+//print(DateFormat.Hm().format(x));

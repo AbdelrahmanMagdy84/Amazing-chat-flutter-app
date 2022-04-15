@@ -5,7 +5,6 @@ import '../../common/custom_snackBar.dart';
 import 'image_auth.dart';
 import 'password_checker.dart';
 
-
 class AuthForm extends StatefulWidget {
   final bool isLoading;
   Function({
@@ -181,7 +180,7 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
-  List<Widget> formFields( BuildContext context) {
+  List<Widget> formFields(BuildContext context) {
     return [
       !isLogin
           ? ImageAuth(chooseImage)
@@ -207,6 +206,7 @@ class _AuthFormState extends State<AuthForm> {
             validator: emailValidator,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10),
               errorStyle: TextStyle(height: 0.5),
               label: Text("Email Address"),
               border: OutlineInputBorder(
@@ -260,6 +260,7 @@ class _AuthFormState extends State<AuthForm> {
             },
             validator: passwordValidator,
             decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10),
               errorStyle: TextStyle(height: 0.5),
               constraints:
                   BoxConstraints(minWidth: 100, maxHeight: 50, minHeight: 40),
@@ -279,7 +280,6 @@ class _AuthFormState extends State<AuthForm> {
     ];
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,7 +297,7 @@ class _AuthFormState extends State<AuthForm> {
                     topLeft: Radius.circular(70),
                     topRight: Radius.circular(70)),
               ),
-              padding:const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -317,7 +317,7 @@ class _AuthFormState extends State<AuthForm> {
                           ),
                         const SizedBox(height: 20),
                         if (widget.isLoading)
-                           const Padding(
+                          const Padding(
                             padding: EdgeInsets.only(bottom: 20),
                             child: CircularProgressIndicator(),
                           ),
