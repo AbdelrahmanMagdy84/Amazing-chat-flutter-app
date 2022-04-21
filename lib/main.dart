@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'provider/user_Provider.dart';
+import 'provider/user_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +23,7 @@ class CustomTextStyle {
 Color secondery = const Color(0xFFE2D784);
 Color primary = const Color(0xFF05595B);
 
+// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
                   );
                 }
 
-                return SplashScreen();
+                return const SplashScreen();
               },
             ),
           );

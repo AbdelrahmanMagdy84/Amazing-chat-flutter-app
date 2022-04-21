@@ -1,4 +1,4 @@
-import 'package:amazing_chat/provider/user_Provider.dart';
+import 'package:amazing_chat/provider/user_provider.dart';
 import 'package:amazing_chat/widgets/others/app_bar_title_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +9,8 @@ import '../widgets/drawer/temporary_drawer.dart';
 import '../widgets/friends widgets/friend_grid_item.dart';
 
 class FriendsScreen extends StatelessWidget {
+  const FriendsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class FriendsScreen extends StatelessWidget {
         iconTheme:
             IconThemeData(color: Theme.of(context).colorScheme.secondary),
         centerTitle: true,
-        title: AppBarTitle(null),
+        title:const AppBarTitle(null),
         actions: [dropdowbButtonBuilder(context)],
       ),
       body: FutureBuilder(

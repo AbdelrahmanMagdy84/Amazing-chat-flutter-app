@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:amazing_chat/models/Acount.dart';
+import 'package:amazing_chat/models/acount.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

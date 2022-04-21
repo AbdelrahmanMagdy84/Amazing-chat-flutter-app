@@ -1,12 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../provider/user_Provider.dart';
+import '../../provider/user_provider.dart';
 
 class NewMessage extends StatefulWidget {
-  String? roomDocId;
+  final String? roomDocId;
 
-  NewMessage(this.roomDocId);
+ // ignore: use_key_in_widget_constructors
+ const NewMessage(this.roomDocId);
   @override
   State<NewMessage> createState() => _NewMessageState();
 }

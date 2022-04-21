@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfileImageWidget extends StatelessWidget {
-  BoxConstraints constraints;
-  bool isLoading;
-  String imageUrl;
-  Function(BuildContext context)? chooseImage;
-  ProfileImageWidget({
+  final BoxConstraints constraints;
+  final bool isLoading;
+  final String imageUrl;
+ final Function(BuildContext context)? chooseImage;
+ // ignore: use_key_in_widget_constructors
+ const ProfileImageWidget({
     required this.constraints,
     required this.isLoading,
     required this.imageUrl,

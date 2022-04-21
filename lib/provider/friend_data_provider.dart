@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/Acount.dart';
+import '../models/acount.dart';
 
 class FriendDataProvider with ChangeNotifier {
-  var _data = Acount("", "", "");
+  final _data = Acount("", "", "");
   Acount get getData {
     return _data;
   }

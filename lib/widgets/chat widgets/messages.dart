@@ -1,17 +1,17 @@
 import 'package:amazing_chat/provider/friend_data_provider.dart';
-import 'package:amazing_chat/provider/user_Provider.dart';
+import 'package:amazing_chat/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'message_bubble.dart';
 import 'no_message_widget.dart';
-import 'package:intl/intl.dart';
+
 
 class Messages extends StatefulWidget {
   final String? roomDocId;
 
-  Messages(this.roomDocId);
+ const Messages(this.roomDocId, {Key? key}) : super(key: key);
   @override
   State<Messages> createState() => _MessagesState();
 }

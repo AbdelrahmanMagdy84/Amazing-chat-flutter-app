@@ -1,13 +1,15 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../common/custom_snackBar.dart';
+import '../../common/custom_snackbar.dart';
 import 'image_auth.dart';
 import 'password_checker.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLoading;
-  Function({
+ final Function({
     required String email,
     required String username,
     required String password,
@@ -15,7 +17,7 @@ class AuthForm extends StatefulWidget {
     required bool isLogin,
     required BuildContext ctx,
   }) submitFun;
-  AuthForm(this.submitFun, this.isLoading);
+  const AuthForm(this.submitFun, this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }

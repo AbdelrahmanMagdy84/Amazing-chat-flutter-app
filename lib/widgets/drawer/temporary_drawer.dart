@@ -33,9 +33,9 @@ class TemporaryDrawer extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              child: const Center(child: Text("Loading...")),
-            ),
+            
+               const Center(child: Text("Loading...")),
+            
           ],
         ),
       ),

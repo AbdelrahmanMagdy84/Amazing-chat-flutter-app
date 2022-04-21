@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatRoom {
   late String _roomId;
-  get roomId => this._roomId;
+  get roomId => _roomId;
 
   Future<void> setRoomId(String friendId) async {
     final responseDoc = await FirebaseFirestore.instance

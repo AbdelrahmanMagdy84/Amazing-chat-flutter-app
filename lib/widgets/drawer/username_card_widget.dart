@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UsernameCardWidget extends StatelessWidget {
-  String username;
-  Function? showAnimatedContainer;
-  UsernameCardWidget(this.username, this.showAnimatedContainer);
+ final String username;
+ final Function? showAnimatedContainer;
+ // ignore: use_key_in_widget_constructors
+ const UsernameCardWidget(this.username, this.showAnimatedContainer);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,14 +49,12 @@ class UsernameCardWidget extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    child: IconButton(
-                        onPressed: () => showAnimatedContainer!(),
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )),
-                  ),
+                  child:  IconButton(
+                      onPressed: () => showAnimatedContainer!(),
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )),
                 )
               ],
             ),

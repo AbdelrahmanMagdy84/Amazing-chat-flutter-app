@@ -111,7 +111,7 @@ class _AnimatedContainerBuilderState extends State<AnimatedContainerBuilder> {
                                         .secondary),
                               )
                             : Padding(
-                              padding: EdgeInsets.all(5),
+                              padding:const EdgeInsets.all(5),
                               child: CircularProgressIndicator(
                               color: Theme.of(context).colorScheme.secondary,
                                                           ),

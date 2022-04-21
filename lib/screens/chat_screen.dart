@@ -1,7 +1,7 @@
-import 'package:amazing_chat/helpers/Chat_room.dart';
-import 'package:amazing_chat/models/Acount.dart';
+import 'package:amazing_chat/helpers/chat_room.dart';
+import 'package:amazing_chat/models/acount.dart';
 import 'package:amazing_chat/provider/friend_data_provider.dart';
-import 'package:amazing_chat/provider/user_Provider.dart';
+import 'package:amazing_chat/provider/user_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import '../widgets/chat widgets/messages.dart';
@@ -10,10 +10,12 @@ import '../widgets/chat widgets/title_column_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatScreen extends StatelessWidget {
-  static String routeName = "/chat_screen";
+  static const String routeName = "/chat_screen";
 
   late Acount friendAcountData;
   late ChatRoom chatRoom;
+
+   ChatScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     friendAcountData =
@@ -60,23 +62,21 @@ class ChatScreen extends StatelessWidget {
           future: chatRoom.setRoomId(friendAcountData.uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Column(
-                children: [
-                  const Expanded(child: Center(child: Text("Loading"))),
+              return  Column(
+                children:const [
+                   Expanded(child: Center(child: Text("Loading"))),
                   NewMessage(""),
                 ],
               );
             }
 
-            return Container(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Messages(chatRoom.roomId),
-                  ),
-                  NewMessage(chatRoom.roomId),
-                ],
-              ),
+            return Column(
+              children: [
+                Expanded(
+                  child: Messages(chatRoom.roomId),
+                ),
+                NewMessage(chatRoom.roomId),
+              ],
             );
           },
         ));

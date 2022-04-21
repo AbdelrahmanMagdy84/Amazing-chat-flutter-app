@@ -1,9 +1,9 @@
-import 'package:amazing_chat/provider/user_Provider.dart';
+import 'package:amazing_chat/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NoMessagesWidget extends StatelessWidget {
-  NoMessagesWidget(
+ const NoMessagesWidget(
       {Key? key,
       required this.friendImageUrl,
       required this.friendUsername,

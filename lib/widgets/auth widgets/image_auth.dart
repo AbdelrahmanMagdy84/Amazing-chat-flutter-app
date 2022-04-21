@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ImageAuth extends StatefulWidget {
   final Future<File?> Function() pickImage;
-  ImageAuth(this.pickImage);
+  const ImageAuth(this.pickImage, {Key? key}) : super(key: key);
   @override
   _ImageAuthState createState() => _ImageAuthState();
 }

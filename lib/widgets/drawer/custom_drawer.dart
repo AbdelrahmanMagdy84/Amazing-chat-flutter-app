@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:amazing_chat/provider/user_Provider.dart';
+import 'package:amazing_chat/provider/user_provider.dart';
 import 'package:amazing_chat/widgets/drawer/profile_image_widget.dart';
 import 'package:amazing_chat/widgets/drawer/username_card_widget.dart';
 import "package:flutter/material.dart";
@@ -10,9 +10,10 @@ import '../../common/wave_clipper.dart';
 import 'custom_animated_container.dart';
 
 class CustomDrawer extends StatefulWidget {
-  String imageUrl;
-  String username;
-  CustomDrawer(this.imageUrl, this.username);
+ final String imageUrl;
+ final String username;
+ // ignore: use_key_in_widget_constructors
+ const CustomDrawer(this.imageUrl, this.username);
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
